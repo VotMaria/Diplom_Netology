@@ -32,7 +32,7 @@ body {
   font-weight: 100;
 }
 
-/* ~~~~~~~~~~~~ Главная ~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~ Главная (index) ~~~~~~~~~~~~ */
 .page-nav {
   position: sticky;
   top: 2px;
@@ -171,7 +171,7 @@ body {
   font-size: 1.5rem;
 }
 
-/* ~~~~~~~~~~~~ Кинозал ~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~ Кинозал (hall) ~~~~~~~~~~~~ */
 .acceptin-button {
   display: block;
   margin: 3rem auto 0;
@@ -428,6 +428,18 @@ body {
 
   .buying__info-hint {
     display: none;
+  }
+}
+
+@media screen and (max-width: 478px) {
+  .movie__info {
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+
+  .conf-step {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 
