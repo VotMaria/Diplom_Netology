@@ -60,47 +60,64 @@ document.addEventListener('DOMContentLoaded', () => {
     let seances = data.seances.result;
 
     let output = '';
+    let outputHalls = '';
     let movieTitle = '';
     let duration = '';
     let description = '';
     let origin = '';
     let poster = '';
+    let seanceTime = '';
+    /*let actuallySeances = '';*/
+    let actuallyHall = '';
 
-
-    for(let key in films) {
-      movieTitle = films[key].film_name;
-      duration = films[key].film_duration;
-      description = films[key].film_description;
-      origin = films[key].film_origin;
-      poster = films[key].film_poster;
-
-      output += `<section class="movie">
-                   <div class="movie__info">
-                     <div class="movie__poster">
-                       <img class="movie__poster-image" alt='${movieTitle}' src='${poster}'>
-                     </div>
-                     <div class="movie__description">
-                       <h2 class="movie__title">${movieTitle}</h2>
-                       <p class="movie__synopsis">${description}.</p>
-                       <p class="movie__data">
-                         <span class="movie__data-duration">${duration} минут</span>
-                         <span class="movie__data-origin">${origin}</span>
-                        </p>
-                      </div>
-                    </div>
-                 </section>`
-    }
-    
-  for(let key in halls) {
+  
+for(let key in halls) {
     let hallTitle = halls[key].hall_name;
-  }  
+    let hallOpen = halls[key].hall_open;
+        
+    if (hallOpen === '1') {
+      outputHalls +=   `<div class="movie-seances__hall">
+                        <h3 class="movie-seances__hall-title">${hallTitle}</h3>
+                          <ul class="movie-seances__list">
+                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
+                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
+                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
+                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
+                          </ul>
+                        </div>`
+    }
+  } 
 
-  for(let key in seances) {
-    let seanceTime = seances[key].seance_time;
+  for (let key in films) {
+    movieTitle = films[key].film_name;
+    duration = films[key].film_duration;
+    description = films[key].film_description;
+    origin = films[key].film_origin;
+    poster = films[key].film_poster;
+
+    output += `<section class="movie">
+                 <div class="movie__info">
+                   <div class="movie__poster">
+                     <img class="movie__poster-image" alt='${movieTitle}' src='${poster}'>
+                   </div>
+                   <div class="movie__description">
+                     <h2 class="movie__title">${movieTitle}</h2>
+                     <p class="movie__synopsis">${description}.</p>
+                     <p class="movie__data">
+                       <span class="movie__data-duration">${duration} минут</span>
+                       <span class="movie__data-origin">${origin}</span>
+                      </p>
+                    </div>
+                  </div>
+                  ${outputHalls}
+               </section>`          
   }
+
+    
   document.querySelector('main').innerHTML = output; 
-   
+  
 
   }) 
 })  
+  
   
