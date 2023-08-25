@@ -1,1 +1,1 @@
-[web](/client/index.html)
+[web](./client/index.html)
