@@ -54,66 +54,56 @@ document.addEventListener('DOMContentLoaded', () => {
   createRequest('event=update', function(data) {
     console.log(data);
     let films = data.films.result;
-
     let halls = data.halls.result;
-
     let seances = data.seances.result;
 
     let output = '';
-    let outputHalls = '';
-    let movieTitle = '';
-    let duration = '';
-    let description = '';
-    let origin = '';
-    let poster = '';
-    let seanceTime = '';
-    /*let actuallySeances = '';*/
-    let actuallyHall = '';
-
-  
-for(let key in halls) {
-    let hallTitle = halls[key].hall_name;
-    let hallOpen = halls[key].hall_open;
+    let outputSeances = '';
         
-    if (hallOpen === '1') {
-      outputHalls +=   `<div class="movie-seances__hall">
-                        <h3 class="movie-seances__hall-title">${hallTitle}</h3>
-                          <ul class="movie-seances__list">
-                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
-                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
-                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
-                            <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>
+  for (let film of films) {
+    let outputHalls = '';
+
+    
+
+     for(let hall of halls) {
+      let hallOpen = hall.hall_open;
+      if (hallOpen === '1') {
+        
+      
+
+        for (let seance of seances) {
+        actuallySeances = seance.seance_time;  
+        if ((seance.seance_filmid === film.film_id) && (seance.seance_hallid === hall.hall_id)){
+          outputHalls += `<div class="movie-seances__hall">
+                        <h3 class="movie-seances__hall-title">${hall.hall_name}</h3>
+                        <ul class="movie-seances__list">
+                        <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html">${actuallySeances}</a></li>
                           </ul>
-                        </div>`
-    }
-  } 
-
-  for (let key in films) {
-    movieTitle = films[key].film_name;
-    duration = films[key].film_duration;
-    description = films[key].film_description;
-    origin = films[key].film_origin;
-    poster = films[key].film_poster;
-
+                           </div>`
+           
+         }
+        }
+      }  
+    }  
     output += `<section class="movie">
                  <div class="movie__info">
                    <div class="movie__poster">
-                     <img class="movie__poster-image" alt='${movieTitle}' src='${poster}'>
+                     <img class="movie__poster-image" alt='${film.film_name}' src='${film.film_poster}'>
                    </div>
                    <div class="movie__description">
-                     <h2 class="movie__title">${movieTitle}</h2>
-                     <p class="movie__synopsis">${description}.</p>
-                     <p class="movie__data">
-                       <span class="movie__data-duration">${duration} минут</span>
-                       <span class="movie__data-origin">${origin}</span>
-                      </p>
-                    </div>
-                  </div>
-                  ${outputHalls}
-               </section>`          
+                   <h2 class="movie__title">${film.film_name}</h2>
+                   <p class="movie__synopsis">${film.film_description}.</p>
+                   <p class="movie__data">
+                     <span class="movie__data-duration">${film.film_duration} минут</span>
+                     <span class="movie__data-origin">${film.film_origin}</span>
+                    </p>
+                   </div>
+                </div>
+     ${outputHalls}
+    </section>` 
   }
 
-    
+     
   document.querySelector('main').innerHTML = output; 
   
 
