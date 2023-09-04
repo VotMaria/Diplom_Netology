@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let dayWeek = document.querySelectorAll('.page-nav__day-week');
   let dayNumber = document.querySelectorAll('.page-nav__day-number');
   let navDay = document.querySelectorAll('.page-nav__day');
+ 
 
   
 
@@ -30,59 +31,34 @@ document.addEventListener('DOMContentLoaded', () => {
     return days[actuallyDate.getDay()];
   }
 
-
-  
-  let dayChosen = document.querySelector('.page-nav__day_chosen');
-  dayChosen.classList.remove('page-nav__day_chosen');
-  dayToday.classList.add('page-nav__day_chosen');
-  
-  navDay.forEach((element, index) => {
-  element.addEventListener('click', (e) => {
-    
-    for (let element of navDay){
-      element.classList.remove('page-nav__day_chosen');
-    }     
-  
-      navDay[index].classList.add('page-nav__day_chosen');
-  
-      e.preventDefault(); 
-    })
-  })
-
-
-
-  createRequest('event=update', function(data) {
+ 
+    createRequest('event=update', function(data) {
     console.log(data);
     let films = data.films.result;
     let halls = data.halls.result;
+    halls = halls.filter((hall) => hall.hall_open === '1');
     let seances = data.seances.result;
 
     let output = '';
-    let outputSeances = '';
         
   for (let film of films) {
     let outputHalls = '';
-
-    
-
-     for(let hall of halls) {
-      let hallOpen = hall.hall_open;
-      if (hallOpen === '1') {
-        
-      
-
-        for (let seance of seances) {
-        actuallySeances = seance.seance_time;  
-        if ((seance.seance_filmid === film.film_id) && (seance.seance_hallid === hall.hall_id)){
-          outputHalls += `<div class="movie-seances__hall">
+     for(let hall of halls) {   
+        let actuallySeances = seances.filter(seance => ((seance.seance_hallid === hall.hall_id) && (seance.seance_filmid === film.film_id)));
+      if(actuallySeances.length > 0) {
+      outputHalls += `<div class="movie-seances__hall">
                         <h3 class="movie-seances__hall-title">${hall.hall_name}</h3>
-                        <ul class="movie-seances__list">
-                        <li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html">${actuallySeances}</a></li>
-                          </ul>
-                           </div>`
-           
-         }
-        }
+                        <ul class="movie-seances__list">`
+       for(let seance of actuallySeances) {
+        outputHalls += `<li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"
+        data-film-name="${film.film_name}" data-film-id="${film.film_id}" data-hall-id="${hall.hall_id}"
+        data-hall-name="${hall.hall_name}" data-price-standart="${hall.hall_price_standart}" 
+        data-price-vip="${hall.hall_price_vip}" data-seance-id="${seance.seance_id}"
+        data-seance-start="${seance.seance_start}" data-seance-time="${seance.seance_time}">
+        ${seance.seance_time}</a></li>`
+                        }
+      outputHalls += `</ul>
+                        </div>` 
       }  
     }  
     output += `<section class="movie">
@@ -102,10 +78,73 @@ document.addEventListener('DOMContentLoaded', () => {
      ${outputHalls}
     </section>` 
   }
-
-     
-  document.querySelector('main').innerHTML = output; 
   
+  document.querySelector('main').innerHTML = output; 
+
+  let seancesTime = document.querySelectorAll('.movie-seances__time');
+
+function updateSeances () {
+  seancesTime.forEach((element) => {
+    let seanceStart = element.dataset.seanceStart; // определили время выбранного сеанса
+    
+    let chosenDay = document.querySelector('.page-nav__day_chosen'); // определили выбранную дату
+    
+    let chosenDayIndex = Array.from(navDay).indexOf(chosenDay); // определили индекс выбранного дня
+   
+    let chosenDate = new Date();
+    chosenDate.setDate(chosenDate.getDate() + chosenDayIndex);
+    chosenDate.setHours(0, 0, 0);
+
+      let seanceTime = Math.floor(chosenDate.getTime() / 1000) + seanceStart * 60;
+      element.dataset.timeStamp = seanceTime;
+
+      let todayTime = new Date();
+      let currentTime = Math.round(todayTime.getTime() / 1000);
+       if (currentTime > seanceTime) {
+          element.classList.add("acceptin-button-disabled");
+          } else {
+
+         element.classList.remove("acceptin-button-disabled");
+      }
+  })
+}
+
+let dayChosen = document.querySelector('.page-nav__day_chosen');
+  dayChosen.classList.remove('page-nav__day_chosen');
+  dayToday.classList.add('page-nav__day_chosen');
+  
+  navDay.forEach((element, index) => {
+  element.addEventListener('click', (e) => {
+    
+    for (let element of navDay){
+      element.classList.remove('page-nav__day_chosen');
+    }     
+  
+      navDay[index].classList.add('page-nav__day_chosen');
+  
+      e.preventDefault(); 
+
+      updateSeances();
+    })
+  })
+    
+
+  updateSeances();
+
+  for (let element of seancesTime) {
+  element.addEventListener('click', () => {
+    let hallId = element.dataset.hallId;
+    let chosenHall = halls.find((hall) => hall.hall_id == hallId);
+    let chosenData = {
+      ...element.dataset,
+      hallConfig: chosenHall.hall_config
+    };
+    
+    localStorage.setItem('session', JSON.stringify(chosenData));
+    })
+
+  }
+
 
   }) 
 })  
