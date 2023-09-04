@@ -29,9 +29,8 @@ let hint = document.querySelector('.buying__info-hint');
 console.log(hint);
 
 hint.addEventListener('touchstart', (event) => {
-if(event.touchstart > 1) {
     scale.classList.add('buying-scale');
-}
+
 })
 
 
