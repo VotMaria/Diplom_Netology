@@ -28,12 +28,10 @@ console.log(scale);
 let hint = document.querySelector('.buying__info-hint');
 console.log(hint);
 
-hint.addEventListener('touchstart', (event) => {
-if(event.touchstart == 2) {
-    scale.classList.add('buying-scale');
-}
+hint.addEventListener('dblclick', () => {
+        scale.classList.toggle('buying-scale');
+        
 })
-
 
 createRequest(`event=get_hallConfig&timestamp=${parsedSeances.timeStamp}&hallId=${parsedSeances.hallId}&seanceId=${parsedSeances.seanceId}`, function (data) {
 

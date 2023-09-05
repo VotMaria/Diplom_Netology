@@ -415,6 +415,9 @@ body {
   .page-nav .page-nav__day {
     padding: 1rem 2rem;
   }
+  .buying-scale {
+    transform: scale(1.2);
+  }
 }
 @media screen and (min-width: 990px) {
   .page-header, nav, main {
