@@ -416,7 +416,7 @@ body {
     padding: 1rem 2rem;
   }
   .buying-scale {
-    transform: scale(1.2);
+    transform: scale(1.5);
   }
 }
 @media screen and (min-width: 990px) {
@@ -446,7 +446,7 @@ body {
   }
 
   .buying-scale {
-    transform: scale(1.2);
+    transform: scale(1.5);
   }
 }
 

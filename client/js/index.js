@@ -4,9 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let dayNumber = document.querySelectorAll('.page-nav__day-number');
   let navDay = document.querySelectorAll('.page-nav__day');
  
-
-  
-
   let today = new Date().getTime();
 
   for (let i = 0; i < navDay.length; i++) {
@@ -31,14 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return days[actuallyDate.getDay()];
   }
 
- 
-    createRequest('event=update', function(data) {
-    console.log(data);
+  createRequest('event=update', function(data) {
     let films = data.films.result;
     let halls = data.halls.result;
     halls = halls.filter((hall) => hall.hall_open === '1');
     let seances = data.seances.result;
-
     let output = '';
         
   for (let film of films) {
@@ -83,56 +77,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let seancesTime = document.querySelectorAll('.movie-seances__time');
 
-function updateSeances () {
-  seancesTime.forEach((element) => {
-    let seanceStart = element.dataset.seanceStart; // определили время выбранного сеанса
+  function updateSeances () {
+    seancesTime.forEach((element) => {
+      let seanceStart = element.dataset.seanceStart; // определили время выбранного сеанса
     
-    let chosenDay = document.querySelector('.page-nav__day_chosen'); // определили выбранную дату
+      let chosenDay = document.querySelector('.page-nav__day_chosen'); // определили выбранную дату
     
-    let chosenDayIndex = Array.from(navDay).indexOf(chosenDay); // определили индекс выбранного дня
+      let chosenDayIndex = Array.from(navDay).indexOf(chosenDay); // определили индекс выбранного дня
    
-    let chosenDate = new Date();
-    chosenDate.setDate(chosenDate.getDate() + chosenDayIndex);
-    chosenDate.setHours(0, 0, 0);
+      let chosenDate = new Date();
+      chosenDate.setDate(chosenDate.getDate() + chosenDayIndex);
+      chosenDate.setHours(0, 0, 0);
 
-      let seanceTime = Math.floor(chosenDate.getTime() / 1000) + seanceStart * 60;
+      let seanceTime = Math.floor(chosenDate.getTime() / 1000) + seanceStart * 60; // время сеанса
       element.dataset.timeStamp = seanceTime;
 
       let todayTime = new Date();
-      let currentTime = Math.round(todayTime.getTime() / 1000);
-       if (currentTime > seanceTime) {
-          element.classList.add("acceptin-button-disabled");
-          } else {
+      let currentTime = Math.round(todayTime.getTime() / 1000); // время на данный момент
 
+    if (currentTime > seanceTime) {
+      element.classList.add("acceptin-button-disabled");
+    } else {
          element.classList.remove("acceptin-button-disabled");
       }
-  })
-}
+    })
+  }
 
-let dayChosen = document.querySelector('.page-nav__day_chosen');
+  let dayChosen = document.querySelector('.page-nav__day_chosen');
   dayChosen.classList.remove('page-nav__day_chosen');
   dayToday.classList.add('page-nav__day_chosen');
   
   navDay.forEach((element, index) => {
-  element.addEventListener('click', (e) => {
-    
-    for (let element of navDay){
-      element.classList.remove('page-nav__day_chosen');
-    }     
-  
-      navDay[index].classList.add('page-nav__day_chosen');
-  
-      e.preventDefault(); 
-
-      updateSeances();
+    element.addEventListener('click', (e) => {
+      for (let element of navDay){
+        element.classList.remove('page-nav__day_chosen');
+      }  
+        navDay[index].classList.add('page-nav__day_chosen');
+        e.preventDefault(); 
+        updateSeances();
     })
-  })
-    
+  })   
 
   updateSeances();
 
   for (let element of seancesTime) {
-  element.addEventListener('click', () => {
+    element.addEventListener('click', () => {
     let hallId = element.dataset.hallId;
     let chosenHall = halls.find((hall) => hall.hall_id == hallId);
     let chosenData = {
@@ -142,10 +131,7 @@ let dayChosen = document.querySelector('.page-nav__day_chosen');
     
     localStorage.setItem('session', JSON.stringify(chosenData));
     })
-
   }
-
-
   }) 
 })  
   
