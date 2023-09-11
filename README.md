@@ -1,4 +1,4 @@
-[Ссылка на сайт](https://votmaria.github.io/Diplom_Netology/client/index.html)
+[ССЫЛКА НА САЙТ](https://votmaria.github.io/Diplom_Netology/client/index.html)
 
 # Дипломное задание по курсу «JavaScript-программирование для начинающих»
 ## Создание «информационной системы для предварительного бронирования билетов».
