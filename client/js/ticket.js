@@ -1,41 +1,41 @@
-function generateQR () {
-  let parsedSeances = JSON.parse(localStorage.getItem('session'));
+function generateQR() {
+	let parsedSeances = JSON.parse(localStorage.getItem('session'));
 
-/*fetch('https://jscp-diplom.netoserver.ru/', {
-    method: 'POST',
-    body: `event=sale_add&timestamp=${parsedSeances.timeStamp
-}&hallId=${parsedSeances.hallId}&seanceId=${parsedSeances.seanceId}&hallConfiguration=${parsedSeances.hallConfig}`,
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-})*/
- 
-  let filmTitle = document.querySelector('.ticket__title');
-  filmTitle.textContent = parsedSeances.filmName;
+	/*fetch('https://jscp-diplom.netoserver.ru/', {
+	    method: 'POST',
+	    body: `event=sale_add&timestamp=${parsedSeances.timeStamp
+	}&hallId=${parsedSeances.hallId}&seanceId=${parsedSeances.seanceId}&hallConfiguration=${parsedSeances.hallConfig}`,
+	    headers: {
+	        'Content-Type': 'application/x-www-form-urlencoded',
+	    },
+	})*/
 
-  let startSeance = document.querySelector('.ticket__start');
-  let bookedDay = new Date(parsedSeances.timeStamp*1000);
-  let bookedDate = bookedDay.toLocaleString().split(',')[0];
+	let filmTitle = document.querySelector('.ticket__title');
+	filmTitle.textContent = parsedSeances.filmName;
 
-  startSeance.textContent = `${parsedSeances.seanceTime}, ${bookedDate}`;
+	let startSeance = document.querySelector('.ticket__start');
+	let bookedDay = new Date(parsedSeances.timeStamp * 1000);
+	let bookedDate = bookedDay.toLocaleString().split(',')[0];
 
-  let infoHall = document.querySelector('.ticket__hall');
-  infoHall.textContent = parsedSeances.hallName.split('Зал').join('');
+	startSeance.textContent = `${parsedSeances.seanceTime}, ${bookedDate}`;
 
-  let ticketChair = document.querySelector('.ticket__chairs');
-  let text ='';
-  let type = '';
+	let infoHall = document.querySelector('.ticket__hall');
+	infoHall.textContent = parsedSeances.hallName.split('Зал').join('');
 
-  for (let key in parsedSeances.selectedPlaces) {
-    let row = parsedSeances.selectedPlaces[key].row;
-    let place = parsedSeances.selectedPlaces[key].place;  
-    type =  parsedSeances.selectedPlaces[key].type; 
-    text += ` ${row}/${place},`;
-  }
+	let ticketChair = document.querySelector('.ticket__chairs');
+	let text = '';
+	let type = '';
 
-  ticketChair.textContent = text.slice(0, -1);
+	for (let key in parsedSeances.selectedPlaces) {
+		let row = parsedSeances.selectedPlaces[key].row;
+		let place = parsedSeances.selectedPlaces[key].place;
+		type = parsedSeances.selectedPlaces[key].type;
+		text += ` ${row}/${place},`;
+	}
 
-  let contentQr = `
+	ticketChair.textContent = text.slice(0, -1);
+
+	let contentQr = `
   Фильм: "${parsedSeances.filmName}".
   Ряд/место: ${text.slice(0, -1)}.
   Зал: ${parsedSeances.hallName.split('Зал').join('')}.
@@ -44,13 +44,13 @@ function generateQR () {
 
   Билет действителен строго на свой сеанс.
   `
-  document.querySelector('.ticket__info-qr').outerHTML = '<div class="ticket__info-qr"></div>';
+	document.querySelector('.ticket__info-qr').outerHTML = '<div class="ticket__info-qr"></div>';
 
-  let qrCode = QRCreator(contentQr, { image: "SVG" });
-  document.querySelector(".ticket__info-qr").append(qrCode.result);
+	let qrCode = QRCreator(contentQr, {
+		image: "SVG"
+	});
+	document.querySelector(".ticket__info-qr").append(qrCode.result);
 
 }
 
 document.addEventListener('DOMContentLoaded', generateQR);
-
-

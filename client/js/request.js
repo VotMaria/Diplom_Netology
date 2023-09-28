@@ -1,28 +1,27 @@
 function createRequest(body, callback) {
 
-fetch('https://jscp-diplom.netoserver.ru/', {
-    method: 'POST',
-    body: body,
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-})
-  
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error('Произошла ошибка!')
-    }
+	fetch('https://jscp-diplom.netoserver.ru/', {
+			method: 'POST',
+			body: body,
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+		})
 
-    return response.json()
-  })
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error('Произошла ошибка!')
+			}
 
-  .then((data) => {
-    callback(data);
-  })
+			return response.json()
+		})
 
-  .catch((err) => {
-    console.log(err)
-  });
+		.then((data) => {
+			callback(data);
+		})
+
+		.catch((err) => {
+			console.log(err)
+		});
 
 }
-
